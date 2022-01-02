@@ -6,4 +6,5 @@ gspread
 google
 gspread_dataframe
 python-binance
+seaborn
 binance.client
