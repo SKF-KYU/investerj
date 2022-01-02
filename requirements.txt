@@ -5,4 +5,5 @@ altair
 gspread
 google
 gspread_dataframe
+python-binance
 binance.client
