@@ -91,10 +91,10 @@ def main():
     col1, col2 = st.columns(2)
     with col1:
         st.write('ASK')
-        st.dataframe(df_asks.style.format(na_rep='MISSING',formatter={('価格'): "{:.4f}", ('枚数'): "{:,.0f}"}).bar(subset=['枚数'], color='#FF0000'), width=300,height=10000)
+        st.dataframe(df_asks.style.format(na_rep='MISSING',formatter={('価格'): "{:.4f}", ('枚数'): "{:,.0f}"}).bar(subset=['枚数'], color='#FF0000'), width=300,height=100000)
     with col2:
         st.write('BID')
-        st.dataframe(df_bids.style.format(na_rep='MISSING',formatter={('価格'): "{:.4f}", ('枚数'): "{:,.0f}"}).bar(subset=['枚数'], color='#10aa10'), width=300,height=10000)
+        st.dataframe(df_bids.style.format(na_rep='MISSING',formatter={('価格'): "{:.4f}", ('枚数'): "{:,.0f}"}).bar(subset=['枚数'], color='#10aa10'), width=300,height=100000)
 
     # print(df_bids.style.bar(subset=['枚数'], color='#d65f5f'))
 
