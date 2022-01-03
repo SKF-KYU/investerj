@@ -25,6 +25,14 @@ class BinanceAPI:
             print('Exception Messege : {}'.format(e))
             return None
 
+    def get_symbol_ticker(self, pair):
+        try:
+            value = self.client.get_symbol_ticker(symbol=pair)
+            return value
+        except Exception as e:
+            print('Exception Messege : {}'.format(e))
+            return None
+
     def get_order_book(self, pair):
         try:
             value = self.client.get_order_book(symbol=pair,limit=limit)
@@ -32,6 +40,7 @@ class BinanceAPI:
         except Exception as e:
             print('Exception Messege : {}'.format(e))
             return None
+    
 
     def get_asset(self, symbol):
         try:
@@ -44,29 +53,52 @@ class BinanceAPI:
 def main():
     binance_set = BinanceAPI()
 
+    value = binance_set.get_symbol_ticker('JASMYUSDT')
     orderbook = binance_set.get_order_book('JASMYUSDT')
 
     df_bids = pd.DataFrame(orderbook['bids'])
     df_asks = pd.DataFrame(orderbook['asks'])
 
-    df_bids.columns=['kakaku','maisu']
-    df_asks.columns=['kakaku','maisu']
+    df_bids.columns=['価格','枚数']
+    df_asks.columns=['価格','枚数']
 
-    df_bids['kakaku']=df_bids['kakaku'].astype(float)
-    df_bids['maisu']=df_bids['maisu'].astype(float)
-    df_asks['kakaku']=df_asks['kakaku'].astype(float)
-    df_asks['maisu']=df_asks['maisu'].astype(float)
+    df_bids['価格']=df_bids['価格'].astype(float)
+    df_bids['枚数']=df_bids['枚数'].astype(float)
+    df_asks['価格']=df_asks['価格'].astype(float)
+    df_asks['枚数']=df_asks['枚数'].astype(float)
 
-    pd.set_option('display.max_rows', None)
 
+    # pd.get.option("display.max_rows")
     # df_bids
 
-    st.write(df_bids.style.bar(subset=['maisu'], color='#10aa10'))
-    st.write(df_asks.style.bar(subset=['maisu'], color='#ff3333'))
+    # st.write(df_bids.style.bar(subset=['枚数'], color='#10aa10'))
+    # st.write(df_asks.style.bar(subset=['枚数'], color='#ff3333'))
 
-    # print(df_bids.style.bar(subset=['maisu'], color='#d65f5f'))
+    # a = 1
+    # st.write(f'a={a}')
+    value = float(value['price'])
 
-    # df_bids.style.bar(subset=['maisu'], color='#d65f5f')
+    st.markdown("""
+    <style>
+    .big-font {
+        font-size:50px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    st.write(f'<p class="big-font">現在価格：{value}</p>', unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.write('ASK')
+        st.dataframe(df_asks.style.format(na_rep='MISSING',formatter={('価格'): "{:.4f}", ('枚数'): "{:,.0f}"}).bar(subset=['枚数'], color='#FF0000'), width=2000,height=10000)
+    with col2:
+        st.write('BID')
+        st.dataframe(df_bids.style.format(na_rep='MISSING',formatter={('価格'): "{:.4f}", ('枚数'): "{:,.0f}"}).bar(subset=['枚数'], color='#10aa10'), width=2000,height=10000)
+
+    # print(df_bids.style.bar(subset=['枚数'], color='#d65f5f'))
+
+    # df_bids.style.bar(subset=['枚数'], color='#d65f5f')
 
     # st.write(orderbook)
     # print(pd.read_json(orderbook))
