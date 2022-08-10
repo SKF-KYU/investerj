@@ -6,6 +6,7 @@ from numpy import linspace
 import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.stats import gaussian_kde
+import time
 
 limit = 10000
 
@@ -51,71 +52,48 @@ class BinanceAPI:
             return None
 
 def main():
-    binance_set = BinanceAPI()
+        binance_set = BinanceAPI()
 
-    value = binance_set.get_symbol_ticker('JASMYUSDT')
-    orderbook = binance_set.get_order_book('JASMYUSDT')
+        value = binance_set.get_symbol_ticker('JASMYUSDT')
+        orderbook = binance_set.get_order_book('JASMYUSDT')
 
-    df_bids = pd.DataFrame(orderbook['bids'])
-    df_asks = pd.DataFrame(orderbook['asks'])
+        df_bids = pd.DataFrame(orderbook['bids'])
+        df_asks = pd.DataFrame(orderbook['asks'])
 
-    df_bids.columns=['価格','枚数']
-    df_asks.columns=['価格','枚数']
-
-
-
-    df_bids['価格']=df_bids['価格'].astype(float)
-    df_bids['枚数']=df_bids['枚数'].astype(float)
-    df_asks['価格']=df_asks['価格'].astype(float)
-    df_asks['枚数']=df_asks['枚数'].astype(float)
-
-    df_bids = df_bids.set_index('価格')
-    df_asks = df_asks.set_index('価格')
+        df_bids.columns=['価格','枚数']
+        df_asks.columns=['価格','枚数']
 
 
-    # pd.get.option("display.max_rows")
-    # df_bids
 
-    # st.write(df_bids.style.bar(subset=['枚数'], color='#10aa10'))
-    # st.write(df_asks.style.bar(subset=['枚数'], color='#ff3333'))
+        df_bids['価格']=df_bids['価格'].astype(float)
+        df_bids['枚数']=df_bids['枚数'].astype(float)
+        df_asks['価格']=df_asks['価格'].astype(float)
+        df_asks['枚数']=df_asks['枚数'].astype(float)
 
-    # a = 1
-    # st.write(f'a={a}')
-    value = float(value['price'])
+        df_bids = df_bids.set_index('価格')
+        df_asks = df_asks.set_index('価格')
 
-    st.markdown("""
-    <style>
-    .big-font {
-        font-size:20px !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+        # a = 1
+        # st.write(f'a={a}')
+        value = float(value['price'])
 
-    st.write(f'<p class="big-font">BINANCE現在価格：{value}</p>', unsafe_allow_html=True)
+        st.markdown("""
+        <style>
+        .big-font {
+            font-size:20px !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.write('ASK')
-        st.dataframe(df_asks.style.format(na_rep='MISSING',formatter={('価格'): "{:.4f}", ('枚数'): "{:,.0f}"}).bar(subset=['枚数'], color='#FF0000'), width=500,height=100000)
-    with col2:
-        st.write('BID')
-        st.dataframe(df_bids.style.format(na_rep='MISSING',formatter={('価格'): "{:.4f}", ('枚数'): "{:,.0f}"}).bar(subset=['枚数'], color='#10aa10'), width=500,height=100000)
+        st.write(f'<p class="big-font">BINANCE現在価格：{value}</p>', unsafe_allow_html=True)
 
-    # print(df_bids.style.bar(subset=['枚数'], color='#d65f5f'))
-
-    # df_bids.style.bar(subset=['枚数'], color='#d65f5f')
-
-    # st.write(orderbook)
-    # print(pd.read_json(orderbook))
-    # print(orderbook)
-
-    # st.write(orderbook)
-
-    # print(ticker['lastPrice'])
-    # print(ticker['volume'])
-
-    # asset_dict = prv_set.get_asset('BTC')
-    # print(asset_dict['free'])
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write('ASK')
+            st.dataframe(df_asks.style.format(na_rep='MISSING',formatter={('価格'): "{:.4f}", ('枚数'): "{:,.0f}"}).bar(subset=['枚数'], color='#FF0000'), width=500,height=100000)
+        with col2:
+            st.write('BID')
+            st.dataframe(df_bids.style.format(na_rep='MISSING',formatter={('価格'): "{:.4f}", ('枚数'): "{:,.0f}"}).bar(subset=['枚数'], color='#10aa10'), width=500,height=100000)
 
 # if __name__ == '__main__':
 #     main()
